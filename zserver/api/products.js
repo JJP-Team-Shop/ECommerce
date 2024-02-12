@@ -2,105 +2,125 @@ const express = require("express");
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const usersRouter = express.Router();
+const productsRouter = express.Router();
 
-// Deny access if user is not logged in
-usersRouter.use((req, res, next) => {
+// Deny access if product is not logged in
+productsRouter.use((req, res, next) => {
   if (!req.user) {
     return res.status(401).send("You must be logged in to do that.");
   }
   next();
 });
 
-// Get all users
-usersRouter.get("/", async (req, res, next) => {
+// Get all products
+productsRouter.get("/", async (req, res, next) => {
   try {
-    const users = await prisma.user.findMany({
+    const products = await prisma.product.findMany({
       where: {
-        userId: req.user.id,
+        productId: req.product.id,
       },
     });
-    res.send(users);
+    res.send(products);
   } catch (error) {
     next(error);
   }
 });
 
-// Get a user by id
-usersRouter.get("/:id", async (req, res, next) => {
+// Get a product by id
+productsRouter.get("/:id", async (req, res, next) => {
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        id: parseInt(req.params.id),
-        userid: req.user.id,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).send("User not found.");
-    }
-
-    res.send(user);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Create a new user
-usersRouter.post("/", async (req, res, next) => {
-  try {
-    const user = await prisma.user.create({
-      data: {
-        username: req.body.username,
-        password: req.body.password,
-      },
-    });
-    res.status(201).send(user);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Update a user
-usersRouter.put("/:id", async (req, res, next) => {
-  try {
-    const user = await prisma.user.update({
-      data: {
-        name: req.body.username,
-        password: req.body.password,
-      },
+    const product = await prisma.product.findFirst({
       where: {
         id: parseInt(req.params.id),
+        productId: req.product.id,
       },
     });
 
-    if (!user) {
-      return res.status(404).send("User not found.");
+    if (!product) {
+      return res.status(404).send("product not found.");
     }
 
-    res.send(user);
+    res.send(product);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+// model product {
+//     id          Int         @id @default(autoincrement())
+//     productName String
+//     description String
+//     size        String
+//     price       Float
+//     quantity    Int
+//     image       String
+//     cartItems   cartItems[]
+//   }
+// Create a new product
+productsRouter.post("/", async (req, res, next) => {
+  try {
+    const product = await prisma.product.create({
+      data: {
+        productName: req.body.productName,
+        description: req.body.description,
+        size:        req.body.size,
+        price:       req.body.price,
+        quantity:    req.body.price,
+        img:         req.body.img,
+
+      },
+    });
+    res.status(201).send(product);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update a product
+productRouter.put("/:id", async (req, res, next) => {
+  try {
+    const product = await prisma.product.update({
+      data: {
+          productName: req.body.productName,
+        description: req.body.description,
+        size:        req.body.size,
+        price:       req.body.price,
+        quantity:    req.body.price,
+        img:         req.body.img,
+      },
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+
+    if (!product) {
+      return res.status(404).send("product not found.");
+    }
+
+    res.send(product);
   } catch (error) {
     next(error);
   }
 });
 
 // Delete a user by id
-usersRouter.delete("/:id", async (req, res, next) => {
+productsRouter.delete("/:id", async (req, res, next) => {
   try {
-    const user = await prisma.user.delete({
+    const product = await prisma.product.delete({
       where: {
         id: parseInt(req.params.id),
       },
     });
 
-    if (!user) {
-      return res.status(404).send("User not found.");
+    if (!product) {
+      return res.status(404).send("product not found.");
     }
 
-    res.send(user);
+    res.send(product);
   } catch (error) {
     next(error);
   }
 });
 
-module.exports = usersRouter;
+module.exports = productsRouter;

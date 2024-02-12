@@ -1,6 +1,5 @@
 const express = require('express');
 const apiRouter = express.Router();
-
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -61,8 +60,14 @@ apiRouter.use((req, res, next) => {
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
-const postsRouter = require('./posts');
-apiRouter.use('/posts', postsRouter);
+const cartItemsRouter = require('./cartitems');
+apiRouter.use('/cartitems', cartItemsRouter);
+
+const cartsRouter = require('./carts');
+apiRouter.use('/carts', cartsRouter);
+
+const productsRouter = require('./products');
+apiRouter.use('/products', productsRouter);
 
 apiRouter.use((error, req, res, next) => {
   res.send(error);
