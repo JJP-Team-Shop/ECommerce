@@ -11,80 +11,51 @@ datasource db {
 }
 
 model user {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  password String
-  firstName    String
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  firstName String
   lastName  String
-  address   String
-  orders    Order[]
-  Cart      Cart?
-}
-
-model shoppingCart {
- id         Int       @id @default(autoincrement())
-  user       User?     @relation(fields: [userId], references: [id])
-  userId     Int?
-  products   Product[] @relation(references: [id])
-  total      Float
-}
-
-model admin {
- id      Int      @id @default(autoincrement())
-  email   String   @unique
-  password String
-  firstName    String
-  lastName  String
-}
-
-model category {
- id         Int       @id @default(autoincrement())
- name       String    @unique
- gender     String?
-  products      Product[]
+  address   String?
+  cartItems  cartItems[]
+  cart      cart?
+  isAdmin   Boolean
 }
 
 model product {
-id         Int       @id @default(autoincrement())
-productName        String
-description         String
-size        String
-price       Float
-quantity    Int
-image       String
-category    Category  @relation(fields: [categoryId], references: [id])
-categoryId String?
-cartItem      CartItem[]
+  id          Int        @id @default(autoincrement())
+  productName String
+  description String
+  size        String
+  price       Float
+  quantity    Int
+  image       String
+  cartItems    cartItems[]
 }
 
-model CartItem {
-  id        String  @id @default(cuid())
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String
+model cartItems {
+  id        Int     @id @default(autoincrement())
+  product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
   quantity  Int
-
-  cart   Cart   @relation(fields: [cartId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  cartId String
+  cart      cart    @relation(fields: [cartId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  cartId    Int
+  user      user?   @relation(fields: [userId], references: [id])
+  userId    Int?
 
   @@index([productId])
   @@index([cartId])
 }
 
-model Cart {
-  id        String     @id @default(cuid())
-  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?    @unique
-  items     CartItem[]
-
-  @@index([userId])
-}
-
-model Order {
-  id           String   @id @default(cuid())
-  user         User?    @relation(fields: [userId], references: [id])
-  userId       String?
-  status       String
-  totalAmount  Float
+model cart {
+  id          Int        @id @default(autoincrement())
+  user        user?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int?       @unique
+  cartItems   cartItems   @relation(fields: [cartItemsList], references: [productId], onUpdate: Cascade, onDelete: Cascade)
+  cartItemsList   String
+   items           cartItems[] @relation(name: "CartItemsInCart", fields: [id], references: [cartId], onUpdate: Cascade, onDelete: Cascade)
+  status      String
+  totalAmount Float
 
   @@index([userId])
 }
