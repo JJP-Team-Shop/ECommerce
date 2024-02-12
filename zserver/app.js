@@ -3,6 +3,10 @@ const express = require("express");
 const morgan = require("morgan");
 const jwt = require("jsonwebtoken"); 
 const app = express();
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+require("dotenv").config();
+const bcrypt = require('bcrypt');
 
 // Logging middleware
 app.use(morgan("dev"));
