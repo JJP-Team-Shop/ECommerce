@@ -2,7 +2,10 @@
   "name": "teamshop",
   "private": true,
   "version": "0.0.0",
+<<<<<<< HEAD
+=======
  
+>>>>>>> 50e504740a960c4282f8859547ba2e9c9882d0e0
   "scripts": {
     "dev": "nodemon",
     "build": "vite build",

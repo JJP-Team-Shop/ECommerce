@@ -7,20 +7,10 @@ async function seed() {
   try {
     // Clear the database.
     await prisma.user.deleteMany({});
+    await prisma.cartItems.deleteMany({});
     await prisma.cart.deleteMany({});
-    await prisma.cartItem.deleteMany({});
     await prisma.product.deleteMany({});
 
-    // model product {
-    //     id          Int        @id @default(autoincrement())
-    //     productName String
-    //     description String
-    //     size        String
-    //     price       Float
-    //     quantity    Int
-    //     image       String
-    //     cartItem    cartItem[]
-    //   }
     const product = await prisma.product.create({
       data: {
         productName: "Jersey",
@@ -32,16 +22,6 @@ async function seed() {
           "https://fanatics.frgimages.com/baltimore-ravens/mens-nike-jk-dobbins-purple-baltimore-ravens-game-jersey_pi3911000_altimages_ff_3911851-1adebcf5ecc70e85f950alt1_full.jpg?_hv=2&w=900",
       },
     });
-    // model cart {
-    //     id          Int        @id @default(autoincrement())
-    //     user        user?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    //     userId      Int?       @unique
-    //     items       cartItem[]
-    //     status      String
-    //     totalAmount Float
-
-    //     @@index([userId])
-    //   }
 
     const cart = await prisma.cart.create({
       data: {
@@ -51,21 +31,8 @@ async function seed() {
         totalAmount: 0, //add sum function to add total of cart items
       },
     });
-    // model cartItem {
-    //     id        Int     @id @default(autoincrement())
-    //     product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
-    //     productId Int
-    //     quantity  Int
-    //     cart      cart    @relation(fields: [cartId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    //     cartId    Int
-    //     user      user?   @relation(fields: [userId], references: [id])
-    //     userId    Int?
 
-    //     @@index([productId])
-    //     @@index([cartId])
-    //   }
-
-    const cartItem = await prisma.cartItem.create({
+    const cartItem = await prisma.cartItems.create({
       data: {
         product: {
           connect: {
@@ -81,19 +48,6 @@ async function seed() {
       },
     });
 
-    //   model user {
-    //     id        Int        @id @default(autoincrement())
-    //     email     String     @unique
-    //     password  String
-    //     firstName String
-    //     lastName  String
-    //     address   String?
-    //     cartItem  cartItem[]
-    //     cart      cart?
-    //     isAdmin   Boolean
-    //   }
-    // add user
-
     const user = await prisma.user.create({
       data: {
         email: "bob@gmail.com",
@@ -101,7 +55,7 @@ async function seed() {
         firstName: "Bob",
         lastName: "Job",
         address: "123 s street",
-        cartItem: {
+        cartItems: {
           connect: {
             id: cartItem.id,
           },
