@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
 const axios = require("axios");
 
-// Register a new instructor account
+// Register a new admin account
 router.post("/register", async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -17,13 +17,14 @@ router.post("/register", async (req, res, next) => {
       data: {
         username,
         password: hashedPassword,
+        isAdmin: true,
       },
     });
 
     // Create a token with the user id
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    // const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
 
-    res.status(201).send({ token });
+    res.status(201).send( "new admin account created" );
   } catch (error) {
     next(error);
   }
@@ -68,8 +69,6 @@ router.get("/me", async (req, res, next) => {
 });
 
 
-// router.get("/accessToken", async(req, res, next) => {
-//   res.send("i am in this method")
-// })
+
 
 module.exports = router;

@@ -29,7 +29,8 @@ app.use((req, res, next) => {
 });
 
 // Backend Routes
-
+app.use("/auth", require("./auth"));
+app.use("/api", require("./api"));
 
 // Serves the HTML file that Vite builds
 app.get("/", (req, res) => {
