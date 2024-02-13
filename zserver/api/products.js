@@ -5,20 +5,18 @@ const prisma = new PrismaClient();
 const productsRouter = express.Router();
 
 // Deny access if product is not logged in
-productsRouter.use((req, res, next) => {
-  if (!req.user) {
-    return res.status(401).send("You must be logged in to do that.");
-  }
-  next();
-});
+// productsRouter.use((req, res, next) => {
+//   if (!req.user) {
+//     return res.status(401).send("You must be logged in to do that.");
+//   }
+//   next();
+// });
 
 // Get all products
 productsRouter.get("/", async (req, res, next) => {
   try {
     const products = await prisma.product.findMany({
-      where: {
-        productId: req.product.id,
-      },
+    
     });
     res.send(products);
   } catch (error) {
@@ -73,6 +71,7 @@ productsRouter.post("/", async (req, res, next) => {
     });
     res.status(201).send(product);
   } catch (error) {
+    console.error('error fetching products, error')
     next(error);
   }
 });

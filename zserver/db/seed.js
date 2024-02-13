@@ -6,6 +6,8 @@ async function seed() {
   console.log("Seeding the database.");
   try {
     // Clear the database.
+
+
     await prisma.cartItems.deleteMany({});
     await prisma.cart.deleteMany({});
     await prisma.product.deleteMany({});
