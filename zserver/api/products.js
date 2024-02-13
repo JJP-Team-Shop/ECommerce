@@ -29,8 +29,7 @@ productsRouter.get("/:id", async (req, res, next) => {
   try {
     const product = await prisma.product.findFirst({
       where: {
-        id: parseInt(req.params.id),
-        productId: req.product.id,
+        id: parseInt(req.params.id),       
       },
     });
 
@@ -65,7 +64,7 @@ productsRouter.post("/", async (req, res, next) => {
         size:        req.body.size,
         price:       req.body.price,
         quantity:    req.body.price,
-        img:         req.body.img,
+        image:         req.body.image,
 
       },
     });
@@ -86,7 +85,7 @@ productsRouter.put("/:id", async (req, res, next) => {
         size:        req.body.size,
         price:       req.body.price,
         quantity:    req.body.price,
-        img:         req.body.img,
+        image:         req.body.img,
       },
       where: {
         id: parseInt(req.params.id),

@@ -16,9 +16,7 @@ const usersRouter = express.Router();
 usersRouter.get("/", async (req, res, next) => {
   try {
     const users = await prisma.user.findMany({
-      where: {
-        userId: req.user.id,
-      },
+
     });
     res.send(users);
   } catch (error) {
@@ -32,7 +30,6 @@ usersRouter.get("/:id", async (req, res, next) => {
     const user = await prisma.user.findFirst({
       where: {
         id: parseInt(req.params.id),
-        userid: req.user.id,
       },
     });
 
@@ -51,9 +48,14 @@ usersRouter.post("/", async (req, res, next) => {
   try {
     const user = await prisma.user.create({
       data: {
-        username: req.body.username,
+        
+        email: req.body.email,
         password: req.body.password,
-      },
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        address: req.body.address,
+        isAdmin: req.body.isAdmin
+    },
     });
     res.status(201).send(user);
   } catch (error) {
@@ -66,9 +68,14 @@ usersRouter.put("/:id", async (req, res, next) => {
   try {
     const user = await prisma.user.update({
       data: {
-        name: req.body.username,
+        
+        email: req.body.email,
         password: req.body.password,
-      },
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        address: req.body.address,
+        isAdmin: req.body.isAdmin
+    },
       where: {
         id: parseInt(req.params.id),
       },
