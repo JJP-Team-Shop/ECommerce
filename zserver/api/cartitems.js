@@ -16,12 +16,6 @@ const cartItemsRouter = express.Router();
 cartItemsRouter.get("/", async (req, res, next) => {
   try {
     const cartItems = await prisma.cartItems.findMany({
-      where: {
-        userId: req.user.id,
-      },
-      include: {
-        product: true,
-      }
     });
     res.send(cartItems);
   } catch (error) {
@@ -35,7 +29,6 @@ cartItemsRouter.get("/:id", async (req, res, next) => {
     const cartItems = await prisma.cartItems.findFirst({
       where: {
         id: parseInt(req.params.id),
-        userid: req.user.id,
       },
       include: {
         product: true,
@@ -58,10 +51,11 @@ cartItemsRouter.post("/", async (req, res, next) => {
     const { productId, quantity } = req.body;
     const cartItems = await prisma.cartItems.create({
       data: {
-        productId: parseInt(req.params.id),
+        productId: req.body.productId,
         quantity: req.body.quantity,
-        userId: req.user.id,
-      },
+        cartId: req.body.cartId,
+        userId: req.body.userId
+    },
     });
     res.status(201).send(cartItems);
   } catch (error) {
@@ -71,14 +65,17 @@ cartItemsRouter.post("/", async (req, res, next) => {
 
 // Update a Cart Item
 cartItemsRouter.put("/:id", async (req, res, next) => {
+  console.log(req.params.id)
   try {
-    const user = await prisma.cartItems.update({
+    const cartItems = await prisma.cartItems.update({
     where: {
         id: parseInt(req.params.id),
     },
       data: {
-        productId: parseInt(req.params.id),
+        productId: req.body.productId,
         quantity: req.body.quantity,
+        cartId: req.body.cartId,
+        userId: req.body.userId
       },
     });
 
@@ -86,19 +83,18 @@ cartItemsRouter.put("/:id", async (req, res, next) => {
       return res.status(404).send("Cart Items not found.");
     }
 
-    res.send(user);
+    res.send(cartItems);
   } catch (error) {
     next(error);
   }
 });
 
-// Delete a user by id
+// Delete a cart item by id
 cartItemsRouter.delete("/:id", async (req, res, next) => {
   try {
-    const user = await prisma.cartItems.delete({
+    const cartItems = await prisma.cartItems.delete({
       where: {
         id: parseInt(req.params.id),
-        user: req.user.id,
       },
     });
 
