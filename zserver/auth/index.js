@@ -9,22 +9,25 @@ const axios = require("axios");
 // Register a new admin account
 router.post("/register", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { email, password, firstName, lastName, address, isAdmin } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await prisma.user.create({
       data: {
-        username,
+        email,
         password: hashedPassword,
-        isAdmin: true,
-      },
+        firstName,
+        lastName,
+        address,
+        isAdmin
+    },
     });
 
     // Create a token with the user id
     // const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
 
-    res.status(201).send( "new admin account created" );
+    res.status(201).send( "new  account created" );
   } catch (error) {
     next(error);
   }
@@ -33,11 +36,11 @@ router.post("/register", async (req, res, next) => {
 // Login to an existing user account
 router.post("/login", async (req, res, next) => {
   try {
-    const {username, password} = req.body;
+    const {email, password} = req.body;
 
     const user = await prisma.user.findUnique({
       where: {
-        username,  
+        email,  
       },
     });
 
@@ -56,6 +59,7 @@ router.post("/login", async (req, res, next) => {
 
 // Get the currently logged in user
 router.get("/me", async (req, res, next) => {
+  console.log( req.user.id)
   try {
     const user = await prisma.user.findUnique({
       where: {
