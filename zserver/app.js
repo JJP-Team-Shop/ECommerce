@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
 
   try {
-    req.user = jwt.verify(token, process.env.JWT);
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
   } catch {
     req.user = null;
   }
