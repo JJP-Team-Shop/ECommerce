@@ -78,7 +78,7 @@ productsRouter.post("/", async (req, res, next) => {
 });
 
 // Update a product
-productRouter.put("/:id", async (req, res, next) => {
+productsRouter.put("/:id", async (req, res, next) => {
   try {
     const product = await prisma.product.update({
       data: {
