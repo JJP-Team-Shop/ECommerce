@@ -2,105 +2,105 @@ const express = require("express");
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const usersRouter = express.Router();
+const cartsRouter = express.Router();
 
 // Deny access if user is not logged in
-usersRouter.use((req, res, next) => {
-  if (!req.user) {
-    return res.status(401).send("You must be logged in to do that.");
-  }
-  next();
-});
+// cartsRouter.use((req, res, next) => {
+//   if (!req.user) {
+//     return res.status(401).send("You must be logged in to do that.");
+//   }
+//   next();
+// });
 
-// Get all users
-usersRouter.get("/", async (req, res, next) => {
+// Get all carts
+cartsRouter.get("/", async (req, res, next) => {
   try {
-    const users = await prisma.user.findMany({
-      where: {
-        userId: req.user.id,
-      },
-    });
-    res.send(users);
+    const carts = await prisma.cart.findMany();
+    res.send(carts);
   } catch (error) {
     next(error);
   }
 });
 
-// Get a user by id
-usersRouter.get("/:id", async (req, res, next) => {
+// Get a cart by id
+cartsRouter.get("/:id", async (req, res, next) => {
   try {
-    const user = await prisma.user.findFirst({
+    const cart = await prisma.cart.findFirst({
       where: {
         id: parseInt(req.params.id),
-        userid: req.user.id,
+        // userId: req.user.id,
       },
     });
 
-    if (!user) {
-      return res.status(404).send("User not found.");
+    if (!cart) {
+      return res.status(404).send("Cart not found.");
     }
 
-    res.send(user);
+    res.send(cart);
   } catch (error) {
     next(error);
   }
 });
 
-// Create a new user
-usersRouter.post("/", async (req, res, next) => {
+// Create a new cart
+cartsRouter.post("/", async (req, res, next) => {
   try {
-    const user = await prisma.user.create({
+    const cart = await prisma.cart.create({
       data: {
-        username: req.body.username,
-        password: req.body.password,
+        userId: req.body.id,
+        // cartItems,
+        status: req.body.status,
+        totalAmount: req.body.totalAmount,
       },
     });
-    res.status(201).send(user);
+    res.status(201).send(cart);
   } catch (error) {
     next(error);
   }
 });
 
-// Update a user
-usersRouter.put("/:id", async (req, res, next) => {
+// Update a cart
+cartsRouter.put("/:id", async (req, res, next) => {
   try {
-    const user = await prisma.user.update({
+    const cart = await prisma.cart.update({
       data: {
-        name: req.body.username,
-        password: req.body.password,
+        userId: req.body.id,
+        // cartItems,
+        status: req.body.status,
+        totalAmount: req.body.totalAmount,
       },
       where: {
         id: parseInt(req.params.id),
       },
     });
 
-    if (!user) {
-      return res.status(404).send("User not found.");
+    if (!cart) {
+      return res.status(404).send("Cart not found.");
     }
 
-    res.send(user);
+    res.send(cart);
   } catch (error) {
     next(error);
   }
 });
 
-// Delete a user by id
-usersRouter.delete("/:id", async (req, res, next) => {
+// Delete a cart by id
+cartsRouter.delete("/:id", async (req, res, next) => {
   try {
-    const user = await prisma.user.delete({
+    const cart = await prisma.cart.delete({
       where: {
         id: parseInt(req.params.id),
       },
     });
 
-    if (!user) {
-      return res.status(404).send("User not found.");
+    if (!cart) {
+      return res.status(404).send("Cart not found.");
     }
 
-    res.send(user);
+    res.send(cart);
   } catch (error) {
     next(error);
   }
 });
 
-module.exports = usersRouter;
+module.exports = cartsRouter;
