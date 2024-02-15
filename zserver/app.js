@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const jwt = require("jsonwebtoken"); 
+const cors = require("cors"); 
 const app = express();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -17,6 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Static file-serving middleware
 app.use(express.static(path.join(__dirname, "..", "client/dist")));
+
+app.use(cors());
 
 // Check requests for a token and attach the decoded id to the request
 app.use((req, res, next) => {
