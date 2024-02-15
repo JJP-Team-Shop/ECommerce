@@ -102,7 +102,7 @@ productsRouter.put("/:id", async (req, res, next) => {
   }
 });
 
-// Delete a user by id
+// Delete a product by id
 productsRouter.delete("/:id", async (req, res, next) => {
   try {
     const product = await prisma.product.delete({
