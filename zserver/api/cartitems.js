@@ -15,8 +15,7 @@ const cartItemsRouter = express.Router();
 // Get all cartItems
 cartItemsRouter.get("/", async (req, res, next) => {
   try {
-    const cartItems = await prisma.cartItems.findMany({
-    });
+    const cartItems = await prisma.cartItems.findMany({});
     res.send(cartItems);
   } catch (error) {
     next(error);
@@ -48,14 +47,14 @@ cartItemsRouter.get("/:id", async (req, res, next) => {
 // Create a new Cart Item
 cartItemsRouter.post("/", async (req, res, next) => {
   try {
-    const { productId, quantity } = req.body;
+    const { productId, quantity, cartId, userId } = req.body;
     const cartItems = await prisma.cartItems.create({
       data: {
-        productId: req.body.productId,
-        quantity: req.body.quantity,
-        cartId: req.body.cartId,
-        userId: req.body.userId
-    },
+        productId,
+        quantity,
+        cartId,
+        userId,
+      },
     });
     res.status(201).send(cartItems);
   } catch (error) {
@@ -65,17 +64,17 @@ cartItemsRouter.post("/", async (req, res, next) => {
 
 // Update a Cart Item
 cartItemsRouter.put("/:id", async (req, res, next) => {
-  console.log(req.params.id)
+  console.log(req.params.id);
   try {
     const cartItems = await prisma.cartItems.update({
-    where: {
+      where: {
         id: parseInt(req.params.id),
-    },
+      },
       data: {
         productId: req.body.productId,
         quantity: req.body.quantity,
         cartId: req.body.cartId,
-        userId: req.body.userId
+        userId: req.body.userId,
       },
     });
 

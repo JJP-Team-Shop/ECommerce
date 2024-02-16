@@ -47,7 +47,7 @@ cartsRouter.post("/", async (req, res, next) => {
   try {
     const cart = await prisma.cart.create({
       data: {
-        userId: req.body.id,
+        userId: req.body.userId,
         // cartItems,
         status: req.body.status,
         totalAmount: req.body.totalAmount,
@@ -64,7 +64,7 @@ cartsRouter.put("/:id", async (req, res, next) => {
   try {
     const cart = await prisma.cart.update({
       data: {
-        userId: req.body.id,
+        userId: req.body.userId,
         // cartItems,
         status: req.body.status,
         totalAmount: req.body.totalAmount,
