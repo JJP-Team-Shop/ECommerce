@@ -4,14 +4,6 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const cartsRouter = express.Router();
 
-// Deny access if user is not logged in
-// cartsRouter.use((req, res, next) => {
-//   if (!req.user) {
-//     return res.status(401).send("You must be logged in to do that.");
-//   }
-//   next();
-// });
-
 // Get all carts
 cartsRouter.get("/", async (req, res, next) => {
   try {
