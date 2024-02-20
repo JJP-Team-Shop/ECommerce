@@ -27,7 +27,7 @@ router.post("/register", async (req, res, next) => {
     // Create a token with the user id
     // const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
 
-    res.status(201).send( "new  account created" );
+    res.status(201).json({ message: "New account created" }); //////jairus unpushed change
   } catch (error) {
     next(error);
   }
@@ -59,13 +59,14 @@ router.post("/login", async (req, res, next) => {
 
 // Get the currently logged in user
 router.get("/me", async (req, res, next) => {
-  console.log( req.user.id)
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: req.user?.id,
+        id: req.user?.id || undefined,
+        email: req.user?.email,
       },
     });
+    console.log(response)
     res.send(user);
   } catch (error) {
     next(error);
