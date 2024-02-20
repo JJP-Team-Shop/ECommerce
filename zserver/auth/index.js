@@ -59,7 +59,6 @@ router.post("/login", async (req, res, next) => {
 
 // Get the currently logged in user
 router.get("/me", async (req, res, next) => {
-  console.log( req.user.id)
   try {
     const user = await prisma.user.findUnique({
       where: {

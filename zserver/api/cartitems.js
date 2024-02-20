@@ -15,7 +15,9 @@ const cartItemsRouter = express.Router();
 // Get all cartItems
 cartItemsRouter.get("/", async (req, res, next) => {
   try {
-    const cartItems = await prisma.cartItems.findMany({});
+    const cartItems = await prisma.cartItems.findMany({
+      include: { product: true },
+    });
     res.send(cartItems);
   } catch (error) {
     next(error);
@@ -64,25 +66,22 @@ cartItemsRouter.post("/", async (req, res, next) => {
 
 // Update a Cart Item
 cartItemsRouter.put("/:id", async (req, res, next) => {
-  console.log(req.params.id);
   try {
-    const cartItems = await prisma.cartItems.update({
+    const cartItemUpdate = await prisma.cartItems.update({
       where: {
         id: parseInt(req.params.id),
       },
       data: {
-        productId: req.body.productId,
+        productId: req.body.productId, // This might not be necessary for an update unless changing the product
         quantity: req.body.quantity,
-        cartId: req.body.cartId,
-        userId: req.body.userId,
       },
     });
 
-    if (!cartItems) {
+    if (!cartItemUpdate) {
       return res.status(404).send("Cart Items not found.");
     }
 
-    res.send(cartItems);
+    res.send(cartItemUpdate);
   } catch (error) {
     next(error);
   }
@@ -91,17 +90,18 @@ cartItemsRouter.put("/:id", async (req, res, next) => {
 // Delete a cart item by id
 cartItemsRouter.delete("/:id", async (req, res, next) => {
   try {
-    const cartItems = await prisma.cartItems.delete({
+    const cartItemId = parseInt(req.params.id);
+    const deletedCartItem = await prisma.cartItems.delete({
       where: {
-        id: parseInt(req.params.id),
+        id: cartItemId,
       },
     });
 
-    if (!cartItems) {
+    if (!deletedCartItem) {
       return res.status(404).send("Cart Items not found.");
     }
 
-    res.send(cartItems);
+    res.send({ message: "Cart item deleted successfully", deletedCartItem });
   } catch (error) {
     next(error);
   }
