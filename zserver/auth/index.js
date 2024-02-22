@@ -6,7 +6,29 @@ const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
 const axios = require("axios");
 
-// Register a new admin account
+// const cartsRouter = require("./cartsRouter");
+
+// router.use("/api/carts", cartsRouter);
+
+// async function createCart({user}) {
+//   try {
+//     const cartData = {
+//       userId: user.id,
+//       status: "active",
+//       totalAmount: 0.0,
+//     };
+
+//     // Make a POST request to create a new cart
+//     const response = await axios.post("/api/carts", cartData);
+
+//     // Return the created cart
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+// Register a new account
 router.post("/register", async (req, res, next) => {
   try {
     const { email, password, firstName, lastName, address, isAdmin } = req.body;
@@ -24,10 +46,20 @@ router.post("/register", async (req, res, next) => {
     },
     });
 
-    // Create a token with the user id
-    // const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    // const cart = await axios.post("/api/carts", cart.data);({
+    //   data: {
+    //     userId: user.id,
+    //     status: "active",
+    //     totalAmount: 0.0,
+    //   },
+    // });
 
-    res.status(201).json({ message: "New account created" }); //////jairus unpushed change
+    const userWithId = { ...user, userId: user.id };
+    
+    console.log("New user created:", userWithId);
+   
+
+    res.status(201).json({ user: userWithId }); 
   } catch (error) {
     next(error);
   }
@@ -66,7 +98,7 @@ router.get("/me", async (req, res, next) => {
         email: req.user?.email,
       },
     });
-    console.log(response)
+   
     res.send(user);
   } catch (error) {
     next(error);
