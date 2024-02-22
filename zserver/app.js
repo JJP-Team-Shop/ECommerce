@@ -36,13 +36,6 @@ app.use((req, res, next) => {
 app.use("/auth", require("./auth"));
 app.use("/api", require("./api"));
 // Protect API routes with JWT verification middleware
-app.use("/api", (req, res, next) => {
-  // Check if user is authenticated
-  if (!req.user) {
-    return res.status(401).send("Unauthorized");
-  }
-  next();
-}, require("./api"));
 app.use("/auth", (req, res, next) => {
   // Check if user is authenticated
   if (!req.user) {
@@ -50,6 +43,16 @@ app.use("/auth", (req, res, next) => {
   }
   next();
 }, require("./auth"));
+
+
+app.use("/api", (req, res, next) => {
+  // Check if user is authenticated
+  if (!req.user) {
+    return res.status(401).send("Unauthorized");
+  }
+  next();
+}, require("./api"));
+
 // Serves the HTML file that Vite builds
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "client/dist/index.html"));

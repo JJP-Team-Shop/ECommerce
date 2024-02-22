@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 async function seed() {
   console.log("Seeding the database.");
   try {
-    // Clear the database.
+   
 
 
     await prisma.cartItems.deleteMany({});
@@ -15,13 +15,85 @@ async function seed() {
 
     const product = await prisma.product.create({
       data: {
-        productName: "Jersey",
-        description: "J.K. Dobbins",
+        productName: "J.K. Dobbins Jersey",
+        description: "J.K. Dobbins Official Jersey so good, best jersey",
         size: "Medium",
         price: 55.0,
         quantity: 100,
         image:
           "https://fanatics.frgimages.com/baltimore-ravens/mens-nike-jk-dobbins-purple-baltimore-ravens-game-jersey_pi3911000_altimages_ff_3911851-1adebcf5ecc70e85f950alt1_full.jpg?_hv=2&w=900",
+      },
+    });
+
+    const product2 = await prisma.product.create({
+      data: {
+        productName: "Football",
+        description: "Official NFL Football, looks like a jersey but is a football",
+        size: "Standard",
+        price: 25.0,
+        quantity: 50,
+        image:
+        "https://fanatics.frgimages.com/baltimore-ravens/mens-nike-jk-dobbins-purple-baltimore-ravens-game-jersey_pi3911000_altimages_ff_3911851-1adebcf5ecc70e85f950alt1_full.jpg?_hv=2&w=900",
+      },
+    });
+
+    const product3 = await prisma.product.create({
+      data: {
+        productName: "Odell Beckham Jersey",
+        description: "Official NFL Jersey, great stitching",
+        size: "Standard",
+        price: 232.0,
+        quantity: 50,
+        image:
+        "https://fanatics.frgimages.com/baltimore-ravens/mens-nike-jk-dobbins-purple-baltimore-ravens-game-jersey_pi3911000_altimages_ff_3911851-1adebcf5ecc70e85f950alt1_full.jpg?_hv=2&w=900",
+      },
+    });
+
+    const product4 = await prisma.product.create({
+      data: {
+        productName: "Lamar Jackson Jersey",
+        description: "Official NFL Jersey, great stitching",
+        size: "Standard",
+        price: 290.0,
+        quantity: 50,
+        image:
+        "https://fanatics.frgimages.com/baltimore-ravens/mens-nike-jk-dobbins-purple-baltimore-ravens-game-jersey_pi3911000_altimages_ff_3911851-1adebcf5ecc70e85f950alt1_full.jpg?_hv=2&w=900",
+      },
+    });
+
+    const product5 = await prisma.product.create({
+      data: {
+        productName: "Lamar Jackson Jersey",
+        description: "Official NFL Jersey, bad stitching",
+        size: "Standard",
+        price: 30.0,
+        quantity: 50,
+        image:
+        "https://fanatics.frgimages.com/baltimore-ravens/mens-nike-jk-dobbins-purple-baltimore-ravens-game-jersey_pi3911000_altimages_ff_3911851-1adebcf5ecc70e85f950alt1_full.jpg?_hv=2&w=900",
+      },
+    });
+
+    const product6 = await prisma.product.create({
+      data: {
+        productName: "Lamar Jackson Jersey",
+        description: "Official NFL Jersey, bad stitching, used by not lamar jackson",
+        size: "Standard",
+        price: 9.0,
+        quantity: 50,
+        image:
+        "https://fanatics.frgimages.com/baltimore-ravens/mens-nike-jk-dobbins-purple-baltimore-ravens-game-jersey_pi3911000_altimages_ff_3911851-1adebcf5ecc70e85f950alt1_full.jpg?_hv=2&w=900",
+      },
+    });
+
+    const product7 = await prisma.product.create({
+      data: {
+        productName: "Odell Beckham Socks",
+        description: "Looks like jersey, is socks, good socks",
+        size: "Standard",
+        price: 1000.0,
+        quantity: 50,
+        image:
+        "https://fanatics.frgimages.com/baltimore-ravens/mens-nike-jk-dobbins-purple-baltimore-ravens-game-jersey_pi3911000_altimages_ff_3911851-1adebcf5ecc70e85f950alt1_full.jpg?_hv=2&w=900",
       },
     });
 
@@ -67,7 +139,7 @@ async function seed() {
             id: cart.id,
           },
         },
-        isAdmin: false,
+        isAdmin: true,
       },
     });
 
