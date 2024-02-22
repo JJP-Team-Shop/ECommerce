@@ -14,6 +14,7 @@ const cartItemsRouter = express.Router();
 
 // Get all cartItems
 cartItemsRouter.get("/", async (req, res, next) => {
+  
   try {
     const cartItems = await prisma.cartItems.findMany({
       include: { product: true },

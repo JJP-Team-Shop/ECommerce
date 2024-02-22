@@ -6,11 +6,19 @@ const cartsRouter = express.Router();
 
 // Get all carts
 cartsRouter.get("/", async (req, res, next) => {
+  const userId = req.userId; // Extracted from the authentication token
   try {
-    const carts = await prisma.cart.findMany();
-    res.send(carts);
+    const carts = await prisma.cart.findMany({
+      where: {
+        userId: userId, // Fetch only carts belonging to the logged-in user
+      },
+      include: {
+        cartItems: true, // Optionally include related cart items
+      },
+    });
+    res.json(carts);
   } catch (error) {
-    next(error);
+    res.status(500).send({ message: "Error fetching carts", error: error.message });
   }
 });
 

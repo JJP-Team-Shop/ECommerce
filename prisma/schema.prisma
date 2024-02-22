@@ -18,7 +18,7 @@ model user {
   lastName  String
   address   String?
   cartItems cartItems[]
-  cart      cart?
+  cart      cart[]
   isAdmin   Boolean
 }
 
@@ -49,11 +49,10 @@ model cartItems {
 
 model cart {
   id          Int         @id @default(autoincrement())
-  user        user?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int?        @unique
+  user        user?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int?
   cartItems   cartItems[]
-  status      String
+  status      String // Consider using this field to differentiate between 'active', 'saved', 'wishlist', etc.
   totalAmount Float
-
   @@index([userId])
 }
